@@ -77,10 +77,10 @@ def _run_generation(job_id: str, config_name: str, pipeline: str, count: int) ->
 
     try:
         sys.path.insert(0, str(BASE_DIR.parent))
-        from ai_ad_agency.utils.config import load_config
+        from ai_ad_agency.utils.config import load_app_config
         from ai_ad_agency.models.schemas import OfferConfig
 
-        app_config = load_config(str(BASE_DIR / "configs" / "app_config.json"))
+        app_config = load_app_config(str(BASE_DIR / "configs" / "app_config.json"))
         with open(config_path) as f:
             offer_data = json.load(f)
         offer = OfferConfig(**offer_data)
