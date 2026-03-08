@@ -444,7 +444,7 @@
   }
 
   async function loadFiles(jobId) {
-    const res = await fetch(`/outputs/${jobId}/files`);
+    const res = await fetch(`/api/job/${jobId}/files`);
     const data = await res.json();
     const container = document.getElementById(`files-${jobId}`);
     if (!container || !data.files || data.files.length === 0) return;

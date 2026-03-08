@@ -220,7 +220,7 @@ async def job_status(job_id: str):
     return JSONResponse(job)
 
 
-@app.get("/outputs/{job_id}/files")
+@app.get("/api/job/{job_id}/files")
 async def list_outputs(job_id: str):
     with _jobs_lock:
         job = _jobs.get(job_id)
