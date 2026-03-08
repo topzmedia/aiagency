@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Ad Agency</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f1a;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border-bottom: 1px solid #2d3748;
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header .logo {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #7c3aed, #3b82f6, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    header .tagline {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    /* ── Layout ── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #1a1a2e;
+      border: 1px solid #2d3748;
+      border-radius: 16px;
+      padding: 28px;
+    }
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── Form ── */
+    .form-group { margin-bottom: 18px; }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    select, input[type=number] {
+      width: 100%;
+      padding: 10px 14px;
+      background: #0f0f1a;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    select:focus, input[type=number]:focus {
+      border-color: #7c3aed;
+    }
+
+    /* Pipeline buttons */
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .pipeline-btn {
+      padding: 12px 10px;
+      background: #0f0f1a;
+      border: 2px solid #374151;
+      border-radius: 10px;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .pipeline-btn:hover { border-color: #7c3aed; color: #e2e8f0; }
+    .pipeline-btn.selected {
+      border-color: #7c3aed;
+      background: #2d1b69;
+      color: #c4b5fd;
+    }
+    .pipeline-btn .icon { font-size: 20px; display: block; margin-bottom: 4px; }
+
+    /* Generate button */
+    #generate-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    #generate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    #generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ── Jobs Panel ── */
+    .jobs-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: #4a5568;
+    }
+    .jobs-empty .big-icon { font-size: 48px; margin-bottom: 12px; }
+
+    .job-card {
+      background: #0f0f1a;
+      border: 1px solid #2d3748;
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+    .job-card:hover { border-color: #4a5568; }
+
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .job-title { font-weight: 700; font-size: 15px; }
+    .job-meta { color: #64748b; font-size: 12px; margin-top: 2px; }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-queued  { background: #1e3a5f; color: #60a5fa; }
+    .badge-running { background: #1a2e1a; color: #4ade80; animation: pulse 1.5s infinite; }
+    .badge-done    { background: #14532d; color: #86efac; }
+    .badge-error   { background: #450a0a; color: #f87171; }
+
+    @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.6 } }
+
+    /* Log */
+    .log-box {
+      background: #070710;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      color: #94a3b8;
+      max-height: 140px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+    .log-box .log-line { margin-bottom: 2px; }
+    .log-box .log-line::before { content: "› "; color: #7c3aed; }
+
+    /* Files list */
+    .files-list { margin-top: 10px; }
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border-radius: 7px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+      color: #cbd5e1;
+    }
+    .file-item:hover { background: #1e293b; color: #e2e8f0; }
+    .file-icon { font-size: 16px; width: 22px; text-align: center; }
+    .file-name { flex: 1; }
+    .file-size { color: #4a5568; font-size: 11px; }
+    .files-toggle {
+      background: none;
+      border: 1px solid #374151;
+      border-radius: 7px;
+      color: #7c3aed;
+      font-size: 12px;
+      padding: 5px 12px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .files-toggle:hover { background: #1e293b; }
+
+    /* Progress bar */
+    .progress-bar {
+      height: 3px;
+      background: #1e293b;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #7c3aed, #3b82f6);
+      border-radius: 2px;
+      transition: width 0.5s;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">AI Ad Agency</div>
+    <div class="tagline">Generate hooks, scripts, and images for your ad campaigns</div>
+  </div>
+</header>
+
+<main>
+  <div class="grid">
+
+    <!-- ── LEFT: Generate Panel ── -->
+    <div class="card">
+      <h2>🚀 Generate Ads</h2>
+
+      <div class="form-group">
+        <label>Offer / Campaign</label>
+        <select id="config-select">
+          {% for c in configs %}
+          <option value="{{ c }}">{{ c.replace('_', ' ').replace('.json', '').title() }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>What to Generate</label>
+        <div class="pipeline-grid">
+          <div class="pipeline-btn selected" data-value="hooks" onclick="selectPipeline(this)">
+            <span class="icon">🎣</span>Hooks
+          </div>
+          <div class="pipeline-btn" data-value="scripts" onclick="selectPipeline(this)">
+            <span class="icon">📝</span>Scripts
+          </div>
+          <div class="pipeline-btn" data-value="images" onclick="selectPipeline(this)">
+            <span class="icon">🖼️</span>Images
+          </div>
+          <div class="pipeline-btn" data-value="all" onclick="selectPipeline(this)">
+            <span class="icon">⚡</span>All
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>How Many?</label>
+        <input type="number" id="count-input" value="10" min="1" max="200" />
+      </div>
+
+      <button id="generate-btn" onclick="startGeneration()">
+        ✨ Generate Now
+      </button>
+    </div>
+
+    <!-- ── RIGHT: Jobs Panel ── -->
+    <div class="card">
+      <h2>📋 Your Jobs</h2>
+
+      <div id="jobs-container">
+        {% if not jobs %}
+        <div class="jobs-empty">
+          <div class="big-icon">🎬</div>
+          <div>No jobs yet — click <strong>Generate Now</strong> to start!</div>
+        </div>
+        {% else %}
+          {% for job in jobs %}
+          <div class="job-card" id="job-{{ job.id }}">
+            <div class="job-header">
+              <div>
+                <div class="job-title">{{ job.pipeline.title() }} — {{ job.config.replace('.json','') }}</div>
+                <div class="job-meta">Count: {{ job.count }} · {{ job.created_at[:19].replace('T',' ') }}</div>
+              </div>
+              <span class="badge badge-{{ job.status }}">{{ job.status }}</span>
+            </div>
+            {% if job.status == 'running' %}
+            <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+            {% endif %}
+            <div class="log-box">
+              {% for line in job.log %}
+              <div class="log-line">{{ line }}</div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  let selectedPipeline = 'hooks';
+  let activePolls = {};
+
+  function selectPipeline(el) {
+    document.querySelectorAll('.pipeline-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPipeline = el.dataset.value;
+  }
+
+  async function startGeneration() {
+    const btn = document.getElementById('generate-btn');
+    const config = document.getElementById('config-select').value;
+    const count = document.getElementById('count-input').value;
+
+    btn.disabled = true;
+    btn.textContent = '⏳ Starting...';
+
+    const form = new FormData();
+    form.append('config', config);
+    form.append('pipeline', selectedPipeline);
+    form.append('count', count);
+
+    try {
+      const res = await fetch('/generate', { method: 'POST', body: form });
+      const data = await res.json();
+      if (data.job_id) {
+        addJobCard(data.job_id, config, selectedPipeline, count);
+        pollJob(data.job_id);
+      }
+    } catch (e) {
+      alert('Failed to start generation: ' + e);
+    }
+
+    btn.disabled = false;
+    btn.textContent = '✨ Generate Now';
+  }
+
+  function addJobCard(jobId, config, pipeline, count) {
+    const container = document.getElementById('jobs-container');
+    // Remove empty state
+    const empty = container.querySelector('.jobs-empty');
+    if (empty) empty.remove();
+
+    const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
+    const card = document.createElement('div');
+    card.className = 'job-card';
+    card.id = `job-${jobId}`;
+    card.innerHTML = `
+      <div class="job-header">
+        <div>
+          <div class="job-title">${pipeline.charAt(0).toUpperCase()+pipeline.slice(1)} — ${config.replace('.json','')}</div>
+          <div class="job-meta">Count: ${count} · ${now}</div>
+        </div>
+        <span class="badge badge-queued" id="badge-${jobId}">queued</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-${jobId}" style="width:5%"></div></div>
+      <div class="log-box" id="log-${jobId}"></div>
+      <div id="files-${jobId}"></div>
+    `;
+    container.insertBefore(card, container.firstChild);
+  }
+
+  function pollJob(jobId) {
+    if (activePolls[jobId]) return;
+    let progress = 5;
+
+    activePolls[jobId] = setInterval(async () => {
+      try {
+        const res = await fetch(`/job/${jobId}`);
+        const job = await res.json();
+
+        // Update badge
+        const badge = document.getElementById(`badge-${jobId}`);
+        if (badge) {
+          badge.className = `badge badge-${job.status}`;
+          badge.textContent = job.status;
+        }
+
+        // Update progress bar
+        const bar = document.getElementById(`progress-${jobId}`);
+        if (bar) {
+          if (job.status === 'running') progress = Math.min(progress + 8, 90);
+          if (job.status === 'done') progress = 100;
+          bar.style.width = progress + '%';
+        }
+
+        // Update log
+        const logBox = document.getElementById(`log-${jobId}`);
+        if (logBox && job.log) {
+          logBox.innerHTML = job.log.map(l => `<div class="log-line">${l}</div>`).join('');
+          logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        // Show files when done
+        if (job.status === 'done') {
+          clearInterval(activePolls[jobId]);
+          delete activePolls[jobId];
+          loadFiles(jobId);
+        }
+
+        if (job.status === 'error') {
+          clearInterval(activePolls[jobId]);
+          delete activePolls[jobId];
+        }
+
+      } catch (e) { /* ignore poll errors */ }
+    }, 2000);
+  }
+
+  async function loadFiles(jobId) {
+    const res = await fetch(`/outputs/${jobId}/files`);
+    const data = await res.json();
+    const container = document.getElementById(`files-${jobId}`);
+    if (!container || !data.files || data.files.length === 0) return;
+
+    const icons = { '.jpg':'🖼️', '.jpeg':'🖼️', '.png':'🖼️', '.mp4':'🎬', '.mp3':'🎵', '.json':'📄', '.csv':'📊', '.txt':'📝' };
+
+    let html = `<button class="files-toggle" onclick="toggleFiles('files-list-${jobId}')">📁 View ${data.files.length} output files</button>`;
+    html += `<div id="files-list-${jobId}" style="display:none" class="files-list">`;
+    data.files.forEach(f => {
+      const icon = icons[f.ext] || '📄';
+      html += `<a class="file-item" href="/download/${f.path}" target="_blank">
+        <span class="file-icon">${icon}</span>
+        <span class="file-name">${f.name}</span>
+        <span class="file-size">${f.size_kb} KB</span>
+      </a>`;
+    });
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  function toggleFiles(id) {
+    const el = document.getElementById(id);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // Resume polling for any running jobs on page load
+  {% for job in jobs %}
+  {% if job.status in ['queued', 'running'] %}
+  pollJob('{{ job.id }}');
+  {% endif %}
+  {% endfor %}
+</script>
+
+</body>
+</html>
