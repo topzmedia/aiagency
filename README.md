@@ -15,7 +15,6 @@ A full-stack tool for generating, storing, composing, and exporting modular ad c
 ```bash
 npm install
 cd client && npm install && cd ..
-cd server && npm install && cd ..
 ```
 
 ### 2. Environment
