@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ai-ad-agency
+    name: aiagency
     runtime: python
     buildCommand: pip install -r ai_ad_agency/requirements.txt && pip install fastapi uvicorn jinja2 python-multipart
     startCommand: uvicorn ai_ad_agency.web.app:app --host 0.0.0.0 --port $PORT
