@@ -35,7 +35,10 @@ OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
 # App setup
 # ---------------------------------------------------------------------------
 
-app = FastAPI(title="AI Ad Agency", docs_url=None, redoc_url=None)
+# Support running at a subpath (e.g. topzmedia.com/agency)
+ROOT_PATH = os.environ.get("ROOT_PATH", "")
+
+app = FastAPI(title="AI Ad Agency", root_path=ROOT_PATH, docs_url=None, redoc_url=None)
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 app.mount("/outputs", StaticFiles(directory=str(OUTPUTS_DIR)), name="outputs")
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
