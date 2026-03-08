@@ -1,0 +1,25 @@
+{
+  "name": "ad-variant-composer",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "cd server && npm run build",
+    "build:client": "cd client && npm run build",
+    "start": "cd server && npm start",
+    "prisma:generate": "npx prisma generate --schema=prisma/schema.prisma",
+    "prisma:migrate": "npx prisma migrate dev --schema=prisma/schema.prisma",
+    "prisma:seed": "npx tsx prisma/seed.ts",
+    "setup": "npm install && cd client && npm install && cd ../server && npm install && npm run prisma:generate && npm run prisma:migrate && npm run prisma:seed"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
+  }
+}

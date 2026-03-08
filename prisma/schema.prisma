@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Vertical {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects Project[]
+  blocks   CopyBlock[]
+  outputs  GeneratedOutput[]
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  verticalId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  vertical Vertical          @relation(fields: [verticalId], references: [id], onDelete: Cascade)
+  blocks   CopyBlock[]
+  outputs  GeneratedOutput[]
+}
+
+model CopyBlock {
+  id         String   @id @default(uuid())
+  projectId  String
+  verticalId String
+  type       String   // HOOK, PROBLEM, DISCOVERY, BENEFIT, CTA
+  label      String
+  content    String
+  tone       String?
+  audience   String?
+  angle      String?
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  project  Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  vertical Vertical @relation(fields: [verticalId], references: [id], onDelete: Cascade)
+}
+
+model GeneratedOutput {
+  id               String   @id @default(uuid())
+  projectId        String
+  verticalId       String
+  outputType       String   // AD_COPY, VIDEO_SCRIPT
+  hookBlockId      String?
+  problemBlockId   String?
+  discoveryBlockId String?
+  benefitBlockId   String?
+  ctaBlockId       String?
+  fullText         String
+  combinationHash  String   @unique
+  status           String   @default("DRAFT") // DRAFT, APPROVED, ARCHIVED
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  project  Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  vertical Vertical @relation(fields: [verticalId], references: [id], onDelete: Cascade)
+}
