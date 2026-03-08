@@ -1,0 +1,52 @@
+{
+  "offer_name": "Joint Support Supplement",
+  "offer_description": "A doctor-formulated joint support supplement that helps adults 45+ reduce knee and hip discomfort so they can stay active without relying on painkillers. Backed by clinical ingredients, ships free, 60-day guarantee.",
+  "vertical": "health_supplement",
+  "target_audience": "Adults 45-70 experiencing joint pain, stiffness, or reduced mobility",
+  "pain_points": [
+    "constant knee and hip pain making simple tasks difficult",
+    "can't play with grandkids or stay active",
+    "tired of relying on ibuprofen daily",
+    "failed other supplements that didn't work",
+    "pain affecting sleep quality",
+    "feeling older than their age"
+  ],
+  "benefits": [
+    "clinically-studied ingredients shown to reduce joint discomfort",
+    "noticeable improvement in 30 days or money back",
+    "no prescription needed",
+    "free shipping on all orders",
+    "made in USA, third-party tested",
+    "60-day money-back guarantee"
+  ],
+  "cta": "Get 50% Off Today",
+  "landing_page": "https://example.com/joint-support",
+  "tone": ["empathetic", "hopeful", "evidence-based", "urgent"],
+  "hook_categories": ["curiosity", "warning", "discovery", "urgency", "authority"],
+  "script_styles": [
+    "testimonial",
+    "authority",
+    "story",
+    "direct_response",
+    "almost_missed"
+  ],
+  "video_lengths": ["short", "medium"],
+  "image_styles": [
+    "lifestyle",
+    "testimonial_still",
+    "headline",
+    "before_after",
+    "quote_card"
+  ],
+  "broll_themes": [
+    "person walking pain-free outdoors",
+    "active senior gardening",
+    "grandparent playing with grandchild",
+    "supplement bottle close-up",
+    "person at kitchen table with supplements",
+    "doctor or medical setting"
+  ],
+  "brand_name": "FlexiCore",
+  "brand_colors": ["#27AE60", "#2C3E50", "#FFFFFF"],
+  "disclaimer_text": "These statements have not been evaluated by the FDA. Not intended to diagnose, treat, cure, or prevent any disease."
+}

@@ -1,0 +1,56 @@
+{
+  "offer_name": "Medicare Supplement Insurance",
+  "offer_description": "Help adults 64+ find affordable Medicare Supplement plans that cover gaps in Original Medicare — including copays, coinsurance, and deductibles. Fast online comparison, no obligation quote, available in all 50 states.",
+  "vertical": "insurance",
+  "target_audience": "Adults 64 and older, Medicare eligible, concerned about healthcare costs",
+  "pain_points": [
+    "unexpected medical bills despite having Medicare",
+    "confusion about what Medicare actually covers",
+    "fear of large out-of-pocket expenses",
+    "stress about affording necessary prescriptions",
+    "worry about becoming a burden to family",
+    "not knowing if there are better plan options available"
+  ],
+  "benefits": [
+    "fills the gaps Medicare leaves behind",
+    "predictable monthly premiums instead of surprise bills",
+    "no doctor network restrictions",
+    "quick 2-minute online comparison",
+    "licensed agents available to answer questions",
+    "free no-obligation quotes"
+  ],
+  "cta": "Check Your Eligibility",
+  "landing_page": "https://example.com/medicare",
+  "tone": ["urgent", "empathetic", "trustworthy", "authoritative"],
+  "hook_categories": ["curiosity", "warning", "discovery", "urgency", "authority"],
+  "script_styles": [
+    "testimonial",
+    "authority",
+    "story",
+    "direct_response",
+    "comparison",
+    "almost_missed",
+    "news_update"
+  ],
+  "video_lengths": ["short", "medium", "long"],
+  "image_styles": [
+    "lifestyle",
+    "testimonial_still",
+    "headline",
+    "quote_card",
+    "infographic",
+    "ugc_screenshot"
+  ],
+  "broll_themes": [
+    "kitchen table paperwork",
+    "phone scrolling Medicare site",
+    "doctor consultation",
+    "relief moment couple",
+    "family lifestyle seniors",
+    "walking outdoors active senior",
+    "holding prescription bottles"
+  ],
+  "brand_name": "MediGuide",
+  "brand_colors": ["#1B4F72", "#2ECC71", "#FFFFFF"],
+  "disclaimer_text": "Not affiliated with the U.S. government or Medicare program."
+}

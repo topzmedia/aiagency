@@ -1,0 +1,97 @@
+{
+  "project_name": "AI Ad Agency",
+  "version": "1.0.0",
+  "base_output_dir": "ai_ad_agency/outputs",
+  "base_data_dir": "ai_ad_agency/data",
+  "base_log_dir": "ai_ad_agency/data/logs",
+  "log_level": "INFO",
+  "log_to_file": true,
+  "max_concurrent_renders": 5,
+  "max_retries": 4,
+  "retry_base_delay_sec": 2.0,
+  "cache_enabled": true,
+  "cache_dir": "ai_ad_agency/data/cache",
+  "db_path": "ai_ad_agency/data/metadata/runs.db",
+  "providers": {
+    "llm": {
+      "provider": "openai",
+      "model": "gpt-4o",
+      "temperature": 0.9,
+      "max_tokens": 2048,
+      "requests_per_minute": 60
+    },
+    "avatar": {
+      "provider": "heygen",
+      "requests_per_minute": 10,
+      "poll_interval_sec": 10,
+      "max_poll_attempts": 60,
+      "render_width": 1080,
+      "render_height": 1920
+    },
+    "image": {
+      "provider": "openai_dalle",
+      "model": "dall-e-3",
+      "requests_per_minute": 15
+    },
+    "video": {
+      "provider": "mock",
+      "requests_per_minute": 5,
+      "poll_interval_sec": 15,
+      "max_poll_attempts": 40
+    },
+    "voice": {
+      "provider": "elevenlabs",
+      "model_id": "eleven_monolingual_v1",
+      "requests_per_minute": 20
+    }
+  },
+  "avatar_selection": {
+    "total_avatars": 60,
+    "max_reuse_per_batch": 3,
+    "prefer_realism_score_above": 7.0,
+    "catalog_path": "ai_ad_agency/data/metadata/avatar_catalog.json",
+    "sync_on_startup": false
+  },
+  "render": {
+    "video_formats": ["1080x1920", "1080x1080"],
+    "image_sizes": ["1080x1080", "1080x1350", "1200x628"],
+    "video_fps": 30,
+    "video_crf": 23,
+    "video_preset": "medium",
+    "audio_bitrate": "128k",
+    "ffmpeg_threads": 4,
+    "output_video_codec": "libx264",
+    "output_audio_codec": "aac",
+    "hook_card_duration_sec": 2.5,
+    "cta_card_duration_sec": 3.0,
+    "broll_insert_position": "after_hook",
+    "music_volume": 0.08
+  },
+  "variants": {
+    "max_variants": 500,
+    "hooks_per_run": 200,
+    "rotations_per_hook": 4,
+    "scripts_per_hook": 3,
+    "script_variants_per_script": 2,
+    "images_per_run": 200,
+    "broll_clips_per_run": 40,
+    "talking_actor_jobs_per_run": 100,
+    "use_rotated_hooks_weight": 0.6,
+    "use_broll_weight": 0.7,
+    "use_captions_weight": 0.9,
+    "max_same_hook_in_batch": 10,
+    "max_same_avatar_in_batch": 8,
+    "max_same_script_in_batch": 5,
+    "dedupe_similarity_threshold": 0.85
+  },
+  "qa": {
+    "min_video_duration_sec": 5.0,
+    "max_video_duration_sec": 120.0,
+    "min_file_size_bytes": 50000,
+    "required_audio": true,
+    "check_dimensions": true,
+    "reject_duplicate_hashes": true,
+    "reject_near_duplicate_metadata": true,
+    "near_duplicate_fields": ["hook_id", "avatar_id", "script_id"]
+  }
+}

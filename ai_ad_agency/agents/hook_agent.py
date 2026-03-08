@@ -1,0 +1,304 @@
+"""
+Hook Agent — generates ad hooks for all categories, deduplicates, scores, and persists.
+"""
+from __future__ import annotations
+
+import math
+import re
+from pathlib import Path
+from typing import List
+
+from ..models.enums import HookCategory
+from ..models.schemas import Hook, OfferConfig
+from ..providers.llm_provider import BaseLLMProvider
+from ..utils.dedupe import TextDedupe
+from ..utils.io import models_to_csv, write_models_json
+from ..utils.logging_utils import get_module_logger
+from ..utils.prompt_templates import (
+    HOOK_CATEGORY_DESCRIPTIONS,
+    HOOK_SYSTEM_PROMPT,
+    HOOK_USER_PROMPT,
+)
+from ..utils.retries import TransientError, with_retries
+
+logger = get_module_logger("hook_agent")
+
+# ---------------------------------------------------------------------------
+# Constants
+# ---------------------------------------------------------------------------
+
+_POWER_WORDS: List[str] = [
+    "secret",
+    "warning",
+    "mistake",
+    "never",
+    "shocking",
+    "revealed",
+    "truth",
+    "hidden",
+    "urgent",
+    "miss",
+    "discover",
+]
+
+_MAX_HOOK_CHARS = 150
+_MAX_HOOK_WORDS = 25
+_OUTPUT_DIR = Path("ai_ad_agency/outputs/hooks")
+
+
+# ---------------------------------------------------------------------------
+# Scoring
+# ---------------------------------------------------------------------------
+
+def _score_hook(text: str) -> float:
+    """
+    Heuristic strength score for a hook (0–10).
+
+    Scoring rules:
+      +0.5  if text contains a question mark
+      +0.3  if text contains "you" or "your" (case-insensitive)
+      +0.4  if text contains any digit
+      +0.2  if word count < 10
+      +0.15 per power word present (capped at +1.0 total from power words)
+      Max final score capped at 10.0
+    """
+    score = 5.0  # baseline
+    lower = text.lower()
+
+    if "?" in text:
+        score += 0.5
+
+    if re.search(r"\byou\b|\byour\b", lower):
+        score += 0.3
+
+    if re.search(r"\d", text):
+        score += 0.4
+
+    words = text.split()
+    if len(words) < 10:
+        score += 0.2
+
+    power_bonus = 0.0
+    for pw in _POWER_WORDS:
+        if pw in lower:
+            power_bonus += 0.15
+        if power_bonus >= 1.0:
+            power_bonus = 1.0
+            break
+    score += power_bonus
+
+    return min(round(score, 2), 10.0)
+
+
+# ---------------------------------------------------------------------------
+# LLM call
+# ---------------------------------------------------------------------------
+
+def _fetch_hooks_for_category(
+    llm: BaseLLMProvider,
+    offer: OfferConfig,
+    category: HookCategory,
+    count: int,
+) -> List[str]:
+    """
+    Call the LLM and return a list of raw hook strings for a single category.
+    Raises TransientError on unexpected response shapes to trigger retries.
+    """
+    system_prompt = HOOK_SYSTEM_PROMPT.format(
+        max_chars=_MAX_HOOK_CHARS,
+        max_words=_MAX_HOOK_WORDS,
+    )
+    user_prompt = HOOK_USER_PROMPT.format(
+        count=count,
+        offer_name=offer.offer_name,
+        offer_description=offer.offer_description,
+        target_audience=offer.target_audience,
+        pain_points=", ".join(offer.pain_points),
+        benefits=", ".join(offer.benefits),
+        tone=", ".join(offer.tone) if offer.tone else "professional, empathetic",
+        category=category.value,
+        category_description=HOOK_CATEGORY_DESCRIPTIONS.get(category.value, ""),
+        max_chars=_MAX_HOOK_CHARS,
+    )
+
+    raw = llm.complete_json(system_prompt, user_prompt, temperature=0.95, max_tokens=4096)
+
+    if isinstance(raw, list):
+        return [str(item).strip() for item in raw if item and str(item).strip()]
+
+    # Sometimes the LLM wraps in a dict
+    if isinstance(raw, dict):
+        for key in ("hooks", "results", "data"):
+            if isinstance(raw.get(key), list):
+                return [str(item).strip() for item in raw[key] if item]
+
+    raise TransientError(
+        f"Unexpected LLM response shape for category={category.value}: {type(raw)}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Main agent function
+# ---------------------------------------------------------------------------
+
+def run_hook_agent(
+    llm: BaseLLMProvider,
+    offer: OfferConfig,
+    total_hooks: int = 200,
+    output_dir: str | Path | None = None,
+    dedupe_threshold: float = 0.85,
+) -> List[Hook]:
+    """
+    Generate `total_hooks` hooks across all categories.
+
+    Steps:
+      1. Divide requested count evenly across active categories.
+      2. Call LLM per category (with retries).
+      3. Deduplicate across all hooks.
+      4. Score each hook.
+      5. Save JSON + CSV.
+      6. Return List[Hook].
+    """
+    out_dir = Path(output_dir) if output_dir else _OUTPUT_DIR
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    categories = offer.hook_categories or list(HookCategory)
+    n_cats = len(categories)
+    per_cat = math.ceil(total_hooks / n_cats)
+
+    # Request ~20% more to allow for deduplication losses
+    request_per_cat = math.ceil(per_cat * 1.2)
+
+    logger.info(
+        "HookAgent: generating %d hooks across %d categories (%d per cat, requesting %d)",
+        total_hooks,
+        n_cats,
+        per_cat,
+        request_per_cat,
+    )
+
+    dedupe = TextDedupe(similarity_threshold=dedupe_threshold)
+    all_hooks: List[Hook] = []
+
+    for idx, category in enumerate(categories):
+        logger.info(
+            "[%d/%d] Generating hooks for category: %s",
+            idx + 1,
+            n_cats,
+            category.value,
+        )
+
+        try:
+            raw_texts = with_retries(
+                _fetch_hooks_for_category,
+                llm,
+                offer,
+                category,
+                request_per_cat,
+                max_attempts=4,
+                base_delay=2.0,
+                max_delay=30.0,
+                reraise=True,
+            )
+        except Exception as exc:
+            logger.error(
+                "Failed to generate hooks for category=%s after retries: %s",
+                category.value,
+                exc,
+            )
+            continue
+
+        logger.debug(
+            "Category=%s: LLM returned %d raw hooks",
+            category.value,
+            len(raw_texts),
+        )
+
+        accepted_cat = 0
+        for text in raw_texts:
+            text = text.strip()
+            if not text:
+                continue
+            # Length guards
+            if len(text) > _MAX_HOOK_CHARS:
+                logger.debug("Hook too long (%d chars), trimming: %s...", len(text), text[:60])
+                text = text[: _MAX_HOOK_CHARS].rsplit(" ", 1)[0]
+
+            if not dedupe.add(text):
+                continue
+
+            score = _score_hook(text)
+            hook = Hook(
+                text=text,
+                category=category,
+                strength_score=score,
+                offer_name=offer.offer_name,
+            )
+            all_hooks.append(hook)
+            accepted_cat += 1
+
+        logger.info(
+            "Category=%s: accepted %d hooks (dedupe stats: %s)",
+            category.value,
+            accepted_cat,
+            dedupe.stats(),
+        )
+
+    # If we came up short, do a top-up pass on the first category
+    shortfall = total_hooks - len(all_hooks)
+    if shortfall > 0 and categories:
+        logger.info("Shortfall of %d hooks — running top-up pass", shortfall)
+        top_up_cat = categories[0]
+        try:
+            extra_texts = with_retries(
+                _fetch_hooks_for_category,
+                llm,
+                offer,
+                top_up_cat,
+                math.ceil(shortfall * 1.5),
+                max_attempts=3,
+                base_delay=2.0,
+                max_delay=20.0,
+                reraise=False,
+            )
+            if extra_texts:
+                for text in extra_texts:
+                    text = text.strip()
+                    if not text:
+                        continue
+                    if len(text) > _MAX_HOOK_CHARS:
+                        text = text[: _MAX_HOOK_CHARS].rsplit(" ", 1)[0]
+                    if not dedupe.add(text):
+                        continue
+                    score = _score_hook(text)
+                    hook = Hook(
+                        text=text,
+                        category=top_up_cat,
+                        strength_score=score,
+                        offer_name=offer.offer_name,
+                    )
+                    all_hooks.append(hook)
+                    if len(all_hooks) >= total_hooks:
+                        break
+        except Exception as exc:
+            logger.warning("Top-up pass failed: %s", exc)
+
+    # Sort by strength score descending
+    all_hooks.sort(key=lambda h: h.strength_score, reverse=True)
+
+    final_stats = dedupe.stats()
+    logger.info(
+        "HookAgent complete: %d hooks generated | exact_dupes=%d | near_dupes=%d",
+        len(all_hooks),
+        final_stats["exact_duplicates_rejected"],
+        final_stats["near_duplicates_rejected"],
+    )
+
+    # Persist
+    json_path = out_dir / "hooks.json"
+    csv_path = out_dir / "hooks.csv"
+    write_models_json(all_hooks, json_path)
+    models_to_csv(all_hooks, csv_path)
+    logger.info("Saved %d hooks → %s", len(all_hooks), out_dir)
+
+    return all_hooks
