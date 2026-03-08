@@ -1,8 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import path from 'path';
 
-// Resolve database path relative to project root (one level up from server/)
-const dbPath = path.resolve(__dirname, '..', '..', '..', 'prisma', 'dev.db');
+// Use process.cwd() since server runs from project root
+const dbPath = path.join(process.cwd(), 'prisma', 'dev.db');
 
 const prisma = new PrismaClient({
   datasources: {
