@@ -77,14 +77,17 @@ export async function composeOutputHandler(req: Request, res: Response) {
     // Fetch selected blocks
     const blockIds = [data.hookBlockId, data.problemBlockId, data.discoveryBlockId, data.benefitBlockId, data.ctaBlockId].filter(Boolean) as string[];
     const blocks = await prisma.copyBlock.findMany({ where: { id: { in: blockIds } } });
-    const blockMap = new Map(blocks.map((b) => [b.id, b]));
+    const blockMap: Record<string, { id: string; content: string }> = {};
+    for (const b of blocks) {
+      blockMap[b.id] = b;
+    }
 
     const blockContents: Record<string, string> = {};
-    if (data.hookBlockId && blockMap.has(data.hookBlockId)) blockContents.hook = blockMap.get(data.hookBlockId)!.content;
-    if (data.problemBlockId && blockMap.has(data.problemBlockId)) blockContents.problem = blockMap.get(data.problemBlockId)!.content;
-    if (data.discoveryBlockId && blockMap.has(data.discoveryBlockId)) blockContents.discovery = blockMap.get(data.discoveryBlockId)!.content;
-    if (data.benefitBlockId && blockMap.has(data.benefitBlockId)) blockContents.benefit = blockMap.get(data.benefitBlockId)!.content;
-    if (data.ctaBlockId && blockMap.has(data.ctaBlockId)) blockContents.cta = blockMap.get(data.ctaBlockId)!.content;
+    if (data.hookBlockId && blockMap[data.hookBlockId]) blockContents.hook = blockMap[data.hookBlockId].content;
+    if (data.problemBlockId && blockMap[data.problemBlockId]) blockContents.problem = blockMap[data.problemBlockId].content;
+    if (data.discoveryBlockId && blockMap[data.discoveryBlockId]) blockContents.discovery = blockMap[data.discoveryBlockId].content;
+    if (data.benefitBlockId && blockMap[data.benefitBlockId]) blockContents.benefit = blockMap[data.benefitBlockId].content;
+    if (data.ctaBlockId && blockMap[data.ctaBlockId]) blockContents.cta = blockMap[data.ctaBlockId].content;
 
     const result = composeOutput({ templateId: data.templateId, blocks: blockContents });
 

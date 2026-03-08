@@ -76,7 +76,7 @@ export default function Composer() {
     return text;
   }, [currentTemplate, blocks, selections]);
 
-  const wordCount = preview.split(/\s+/).filter((w) => w.length > 0).length;
+  const wordCount = preview.split(/\s+/).filter((w: string) => w.length > 0).length;
   const charCount = preview.length;
   const speakingTime = Math.ceil((wordCount / 150) * 60);
 

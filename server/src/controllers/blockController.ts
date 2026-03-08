@@ -127,7 +127,7 @@ export async function generateBlocksHandler(req: Request, res: Response) {
       { type: 'CTA', count: params.ctas },
     ];
 
-    const allGenerated = [];
+    const allGenerated: import('../services/blockGenerationService').GeneratedBlock[] = [];
     for (const { type, count } of blockTypes) {
       if (count > 0) {
         const blocks = generateBlocks({
