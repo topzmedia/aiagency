@@ -469,10 +469,12 @@
     el.style.display = el.style.display === 'none' ? 'block' : 'none';
   }
 
-  // Resume polling for any running jobs on page load
+  // Resume polling for running jobs; load files for completed jobs
   {% for job in jobs %}
   {% if job.status in ['queued', 'running'] %}
   pollJob('{{ job.id }}');
+  {% elif job.status == 'done' %}
+  loadFiles('{{ job.id }}');
   {% endif %}
   {% endfor %}
 </script>
