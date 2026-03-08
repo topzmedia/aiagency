@@ -86,24 +86,24 @@ def _run_generation(job_id: str, config_name: str, pipeline: str, count: int) ->
         offer = OfferConfig(**offer_data)
         output_dir.mkdir(parents=True, exist_ok=True)
 
+        hooks = []
         if pipeline in ("hooks", "all"):
             log("Generating hooks...")
             from ai_ad_agency.providers.llm_provider import build_llm_provider
-            from ai_ad_agency.agents.hook_agent import HookAgent
+            from ai_ad_agency.agents.hook_agent import run_hook_agent
             llm = build_llm_provider(app_config.providers.llm)
-            agent = HookAgent(app_config, llm)
-            hooks = agent.generate_hooks(offer, count=min(count, 30))
-            agent.save_hooks(hooks, str(output_dir / "hooks"))
+            hooks = run_hook_agent(llm, offer, total_hooks=min(count, 30), output_dir=str(output_dir / "hooks"))
             log(f"Generated {len(hooks)} hooks")
 
         if pipeline in ("scripts", "all"):
             log("Generating scripts...")
             from ai_ad_agency.providers.llm_provider import build_llm_provider
-            from ai_ad_agency.agents.script_agent import ScriptAgent
+            from ai_ad_agency.agents.script_agent import run_script_agent
             llm = build_llm_provider(app_config.providers.llm)
-            agent = ScriptAgent(app_config, llm)
-            scripts = agent.generate_batch(offer, count=min(count, 20))
-            agent.save_scripts(scripts, str(output_dir / "scripts"))
+            if not hooks:
+                from ai_ad_agency.agents.hook_agent import run_hook_agent
+                hooks = run_hook_agent(llm, offer, total_hooks=5, output_dir=str(output_dir / "hooks"))
+            scripts = run_script_agent(llm, hooks, offer, scripts_per_hook=2, output_dir=str(output_dir / "scripts"))
             log(f"Generated {len(scripts)} scripts")
 
         if pipeline in ("images", "all"):
