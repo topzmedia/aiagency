@@ -1,0 +1,33 @@
+{
+  "offer_name": "Home Services",
+  "offer_description": "Get free quotes from top-rated local contractors for windows, roofing, gutters, and plumbing. Compare prices, read reviews, and hire with confidence — all in one place.",
+  "vertical": "home_services",
+  "target_audience": "Homeowners 35-65 needing home repairs or improvements",
+  "pain_points": [
+    "don't know how to find a trustworthy contractor",
+    "worried about getting overcharged",
+    "had a bad experience with a contractor before",
+    "roof or gutters are overdue for replacement",
+    "plumbing or windows failing and costing money",
+    "not sure what fair pricing looks like"
+  ],
+  "benefits": [
+    "free quotes from pre-screened local contractors",
+    "compare 3 quotes side by side",
+    "all contractors are licensed and insured",
+    "read verified homeowner reviews",
+    "no obligation to hire",
+    "financing options available"
+  ],
+  "cta": "Get Free Quotes",
+  "landing_page": "https://example.com/home-services",
+  "tone": ["trustworthy", "helpful", "conversational", "urgent"],
+  "hook_categories": ["curiosity", "warning", "discovery", "urgency"],
+  "script_styles": ["testimonial", "direct_response", "story", "comparison", "almost_missed"],
+  "video_lengths": ["short", "medium"],
+  "image_styles": ["lifestyle", "before_after", "headline", "testimonial_still", "ugc_screenshot"],
+  "broll_themes": ["contractor on roof", "new windows installation", "gutter cleaning", "plumber fixing pipe", "happy homeowner with contractor", "before after home exterior"],
+  "brand_name": "HomeConnect",
+  "brand_colors": ["#E67E22", "#2C3E50", "#FFFFFF"],
+  "disclaimer_text": "Contractor availability varies by location. Get multiple quotes before hiring."
+}

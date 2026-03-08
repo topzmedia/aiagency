@@ -1,0 +1,33 @@
+{
+  "offer_name": "Medicare",
+  "offer_description": "Find the best Medicare Advantage or Supplement plan for 2026. Compare plans in your area, see what's covered, and enroll with expert help — at no cost to you.",
+  "vertical": "insurance",
+  "target_audience": "Adults 64+ or turning 65, Medicare-eligible, confused about plan options",
+  "pain_points": [
+    "confused about Medicare Part A B C D options",
+    "unexpected medical bills despite having Medicare",
+    "current plan no longer covers their doctors",
+    "missing the enrollment window",
+    "paying too much in premiums and copays",
+    "worried about prescription drug costs"
+  ],
+  "benefits": [
+    "compare every plan in your zip code",
+    "find plans with $0 premium options",
+    "keep your current doctors in-network",
+    "add dental vision and hearing coverage",
+    "free help from licensed Medicare agents",
+    "enroll in minutes over the phone or online"
+  ],
+  "cta": "Check Your Plans",
+  "landing_page": "https://example.com/medicare",
+  "tone": ["authoritative", "empathetic", "trustworthy", "urgent"],
+  "hook_categories": ["curiosity", "warning", "discovery", "urgency", "authority"],
+  "script_styles": ["testimonial", "authority", "news_update", "direct_response", "almost_missed"],
+  "video_lengths": ["short", "medium", "long"],
+  "image_styles": ["lifestyle", "headline", "testimonial_still", "infographic", "quote_card"],
+  "broll_themes": ["senior couple outdoors", "doctor with senior patient", "senior reviewing documents", "prescription bottles", "active senior lifestyle"],
+  "brand_name": "MediGuide",
+  "brand_colors": ["#1B4F72", "#2ECC71", "#FFFFFF"],
+  "disclaimer_text": "Not affiliated with the U.S. government or Medicare program. A licensed agent may contact you."
+}

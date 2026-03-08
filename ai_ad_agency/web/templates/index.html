@@ -98,6 +98,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
+    .pipeline-grid .pipeline-btn[style*="span 2"] { grid-column: span 2; }
     .pipeline-btn {
       padding: 12px 10px;
       background: #0f0f1a;
@@ -275,8 +276,11 @@
           <div class="pipeline-btn" data-value="images" onclick="selectPipeline(this)">
             <span class="icon">🖼️</span>Images
           </div>
-          <div class="pipeline-btn" data-value="all" onclick="selectPipeline(this)">
-            <span class="icon">⚡</span>All
+          <div class="pipeline-btn" data-value="video" onclick="selectPipeline(this)">
+            <span class="icon">🎬</span>AI Video
+          </div>
+          <div class="pipeline-btn" data-value="all" onclick="selectPipeline(this)" style="grid-column: span 2;">
+            <span class="icon">⚡</span>Generate Everything
           </div>
         </div>
       </div>

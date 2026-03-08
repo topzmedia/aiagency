@@ -1,0 +1,33 @@
+{
+  "offer_name": "Ecommerce",
+  "offer_description": "A high-converting ecommerce product offer. Customize this template for your specific product — includes urgency, social proof, and strong guarantee messaging.",
+  "vertical": "ecommerce",
+  "target_audience": "Online shoppers 25-55 interested in the product category",
+  "pain_points": [
+    "struggling with the problem the product solves",
+    "tried cheaper alternatives that didn't work",
+    "wasting time and money on ineffective solutions",
+    "embarrassed or frustrated by the problem",
+    "skeptical after being burned by other products",
+    "didn't know a solution like this existed"
+  ],
+  "benefits": [
+    "solves the problem fast and effectively",
+    "backed by a 60-day money-back guarantee",
+    "over 10,000 five-star reviews",
+    "made in USA with premium materials",
+    "free shipping on all orders",
+    "limited time 40% off sale"
+  ],
+  "cta": "Shop Now — 40% Off",
+  "landing_page": "https://example.com/product",
+  "tone": ["energetic", "urgent", "conversational", "enthusiastic"],
+  "hook_categories": ["curiosity", "discovery", "urgency", "authority"],
+  "script_styles": ["testimonial", "ugc", "direct_response", "story", "almost_missed"],
+  "video_lengths": ["short", "medium"],
+  "image_styles": ["lifestyle", "ugc_screenshot", "before_after", "testimonial_still", "headline"],
+  "broll_themes": ["product unboxing", "product in use lifestyle", "happy customer testimonial", "before after results", "product close-up beauty shot"],
+  "brand_name": "ShopBrand",
+  "brand_colors": ["#E74C3C", "#F39C12", "#FFFFFF"],
+  "disclaimer_text": "Results may vary. See website for full terms and conditions."
+}

@@ -1,0 +1,33 @@
+{
+  "offer_name": "Health Insurance",
+  "offer_description": "Find affordable health insurance plans that fit your budget and needs. Compare ACA, short-term, and private plans side by side. Enrollment help available at no cost.",
+  "vertical": "insurance",
+  "target_audience": "Uninsured or underinsured adults 26-64 looking for affordable health coverage",
+  "pain_points": [
+    "can't afford current health insurance premiums",
+    "lost employer coverage and don't know options",
+    "confused by deductibles copays and networks",
+    "afraid of a big medical bill with no insurance",
+    "don't know if they qualify for subsidies",
+    "previous bad experience with health insurance"
+  ],
+  "benefits": [
+    "compare plans from all major carriers",
+    "see if you qualify for subsidies that lower your premium",
+    "free enrollment assistance from licensed agents",
+    "plans starting as low as $0/month with subsidies",
+    "coverage for pre-existing conditions",
+    "dental and vision add-ons available"
+  ],
+  "cta": "Check My Options",
+  "landing_page": "https://example.com/health-insurance",
+  "tone": ["empathetic", "hopeful", "trustworthy", "urgent"],
+  "hook_categories": ["curiosity", "warning", "discovery", "urgency", "authority"],
+  "script_styles": ["testimonial", "authority", "story", "direct_response", "almost_missed"],
+  "video_lengths": ["short", "medium", "long"],
+  "image_styles": ["lifestyle", "headline", "testimonial_still", "infographic", "quote_card"],
+  "broll_themes": ["doctor patient consultation", "family healthy outdoors", "person reviewing health plan", "medical bills stress", "relief after getting coverage"],
+  "brand_name": "HealthBridge",
+  "brand_colors": ["#27AE60", "#1A5276", "#FFFFFF"],
+  "disclaimer_text": "Plan availability and pricing varies by state and eligibility."
+}

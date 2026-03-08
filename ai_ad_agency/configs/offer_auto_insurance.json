@@ -1,0 +1,33 @@
+{
+  "offer_name": "Auto Insurance",
+  "offer_description": "Stop overpaying for car insurance. Compare rates from 50+ insurers and save up to $800/year. Takes only 90 seconds to get your personalized quote.",
+  "vertical": "insurance",
+  "target_audience": "Drivers 18-65 who want to save money on car insurance",
+  "pain_points": [
+    "paying too much for car insurance every month",
+    "rates went up without any accidents or tickets",
+    "don't know if they're getting the best deal",
+    "switching feels complicated and risky",
+    "worried about coverage gaps",
+    "frustrating claims experience with current insurer"
+  ],
+  "benefits": [
+    "compare 50+ carriers in 90 seconds",
+    "average savings of $800 per year",
+    "no impact on credit score to compare",
+    "keep your current coverage until you switch",
+    "top-rated claims support",
+    "bundle and save with home insurance"
+  ],
+  "cta": "Compare My Rate",
+  "landing_page": "https://example.com/auto-insurance",
+  "tone": ["urgent", "conversational", "trustworthy", "empathetic"],
+  "hook_categories": ["curiosity", "warning", "urgency", "discovery", "authority"],
+  "script_styles": ["testimonial", "direct_response", "comparison", "almost_missed", "story"],
+  "video_lengths": ["short", "medium"],
+  "image_styles": ["lifestyle", "headline", "before_after", "testimonial_still", "quote_card"],
+  "broll_themes": ["car driving on highway", "person on phone comparing rates", "happy driver", "car keys close-up", "family loading car"],
+  "brand_name": "DriveShield",
+  "brand_colors": ["#C0392B", "#2C3E50", "#FFFFFF"],
+  "disclaimer_text": "Rates vary by state, driving history, and coverage selection."
+}

@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import json
 import os
-import subprocess
 import sys
 import threading
 from datetime import datetime
@@ -36,7 +35,6 @@ STATIC_DIR.mkdir(parents=True, exist_ok=True)
 # App setup
 # ---------------------------------------------------------------------------
 
-# Support running at a subpath (e.g. topzmedia.com/agency)
 ROOT_PATH = os.environ.get("ROOT_PATH", "")
 
 app = FastAPI(title="AI Ad Agency", root_path=ROOT_PATH, docs_url=None, redoc_url=None)
@@ -73,7 +71,7 @@ def _run_generation(job_id: str, config_name: str, pipeline: str, count: int) ->
             _jobs[job_id]["log"].append(msg)
 
     log(f"Starting {pipeline} generation — count={count}")
-    log(f"Config: {config_name}")
+    log(f"Offer: {config_name.replace('.json','').replace('_',' ').title()}")
 
     try:
         sys.path.insert(0, str(BASE_DIR.parent))
@@ -87,14 +85,21 @@ def _run_generation(job_id: str, config_name: str, pipeline: str, count: int) ->
         output_dir.mkdir(parents=True, exist_ok=True)
 
         hooks = []
+
+        # ── Hooks ──────────────────────────────────────────────────────────
         if pipeline in ("hooks", "all"):
             log("Generating hooks...")
             from ai_ad_agency.providers.llm_provider import build_llm_provider
             from ai_ad_agency.agents.hook_agent import run_hook_agent
             llm = build_llm_provider(app_config.providers.llm)
-            hooks = run_hook_agent(llm, offer, total_hooks=min(count, 30), output_dir=str(output_dir / "hooks"))
-            log(f"Generated {len(hooks)} hooks")
+            hooks = run_hook_agent(
+                llm, offer,
+                total_hooks=min(count, 30),
+                output_dir=str(output_dir / "hooks"),
+            )
+            log(f"✓ Generated {len(hooks)} hooks")
 
+        # ── Scripts ────────────────────────────────────────────────────────
         if pipeline in ("scripts", "all"):
             log("Generating scripts...")
             from ai_ad_agency.providers.llm_provider import build_llm_provider
@@ -103,27 +108,67 @@ def _run_generation(job_id: str, config_name: str, pipeline: str, count: int) ->
             if not hooks:
                 from ai_ad_agency.agents.hook_agent import run_hook_agent
                 hooks = run_hook_agent(llm, offer, total_hooks=5, output_dir=str(output_dir / "hooks"))
-            scripts = run_script_agent(llm, hooks, offer, scripts_per_hook=2, output_dir=str(output_dir / "scripts"))
-            log(f"Generated {len(scripts)} scripts")
+            scripts = run_script_agent(
+                llm, hooks, offer,
+                scripts_per_hook=2,
+                output_dir=str(output_dir / "scripts"),
+            )
+            log(f"✓ Generated {len(scripts)} scripts")
 
+        # ── Images ─────────────────────────────────────────────────────────
         if pipeline in ("images", "all"):
             log("Generating images...")
             from ai_ad_agency.providers.image_provider import build_image_provider
             from ai_ad_agency.agents.image_agent import ImageAgent
             img_provider = build_image_provider(app_config.providers.image)
             agent = ImageAgent(app_config, img_provider)
-            images = agent.generate_batch(offer, count=min(count, 10), output_dir=str(output_dir / "images"))
-            log(f"Generated {len(images)} images")
+            images = agent.generate_batch(
+                offer,
+                count=min(count, 20),
+                output_dir=str(output_dir / "images"),
+            )
+            log(f"✓ Generated {len(images)} images")
+
+        # ── Video / Talking Actors ──────────────────────────────────────────
+        if pipeline in ("video", "all"):
+            log("Generating video scripts & actor jobs...")
+            from ai_ad_agency.providers.llm_provider import build_llm_provider
+            from ai_ad_agency.agents.hook_agent import run_hook_agent
+            from ai_ad_agency.agents.script_agent import run_script_agent
+            from ai_ad_agency.agents.avatar_catalog_agent import AvatarCatalogAgent
+            from ai_ad_agency.agents.talking_actor_agent import TalkingActorAgent
+            from ai_ad_agency.providers.avatar_provider import build_avatar_provider
+
+            llm = build_llm_provider(app_config.providers.llm)
+            if not hooks:
+                hooks = run_hook_agent(llm, offer, total_hooks=3, output_dir=str(output_dir / "hooks"))
+            scripts = run_script_agent(llm, hooks, offer, scripts_per_hook=1, output_dir=str(output_dir / "scripts"))
+            log(f"✓ Generated {len(scripts)} video scripts")
+
+            avatar_provider = build_avatar_provider(app_config.providers.avatar)
+            catalog = AvatarCatalogAgent(app_config, avatar_provider)
+            catalog.sync()
+            avatars = catalog.select_diverse_batch(count=min(count, 5))
+            avatar_ids = [a.avatar_id for a in avatars]
+            log(f"✓ Selected {len(avatar_ids)} AI actors")
+
+            actor_agent = TalkingActorAgent(app_config, avatar_provider, catalog)
+            jobs_list = actor_agent.create_jobs_from_scripts(scripts, avatar_ids)
+            rendered = actor_agent.generate_batch(jobs_list, output_dir=str(output_dir / "videos"))
+            done = sum(1 for j in rendered if str(j.render_status) in ("completed", "RenderStatus.COMPLETED"))
+            log(f"✓ Rendered {done}/{len(rendered)} talking actor videos")
 
         with _jobs_lock:
             _jobs[job_id]["status"] = "done"
             _jobs[job_id]["output_dir"] = str(output_dir)
-        log("Done!")
+        log("All done! Click 'View Files' to see your outputs.")
 
     except Exception as exc:
+        import traceback
         with _jobs_lock:
             _jobs[job_id]["status"] = "error"
         log(f"Error: {exc}")
+        log(traceback.format_exc().split('\n')[-2])
 
 
 # ---------------------------------------------------------------------------
@@ -132,7 +177,7 @@ def _run_generation(job_id: str, config_name: str, pipeline: str, count: int) ->
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    configs = [f.name for f in CONFIGS_DIR.glob("*.json") if f.name != "app_config.json"]
+    configs = sorted([f.name for f in CONFIGS_DIR.glob("*.json") if f.name != "app_config.json"])
     jobs = []
     with _jobs_lock:
         for jid, jdata in sorted(_jobs.items(), reverse=True):
@@ -185,13 +230,14 @@ async def list_outputs(job_id: str):
     out_dir = Path(job["output_dir"])
     files = []
     for f in sorted(out_dir.rglob("*")):
-        if f.is_file() and not f.name.endswith(".pyc"):
+        if f.is_file() and not f.name.endswith((".pyc", ".pyo")):
             rel = f.relative_to(OUTPUTS_DIR)
             files.append({
                 "name": f.name,
                 "path": str(rel),
                 "size_kb": round(f.stat().st_size / 1024, 1),
                 "ext": f.suffix.lower(),
+                "category": f.parent.name,
             })
     return JSONResponse({"files": files})
 

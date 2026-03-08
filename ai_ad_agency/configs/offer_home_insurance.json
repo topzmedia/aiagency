@@ -1,0 +1,33 @@
+{
+  "offer_name": "Home Insurance",
+  "offer_description": "Compare and save on home insurance. Get personalized quotes from top-rated carriers in minutes. Protect your home and belongings with the right coverage at the best price.",
+  "vertical": "insurance",
+  "target_audience": "Homeowners 25-65 looking to save on home insurance or find better coverage",
+  "pain_points": [
+    "paying too much for home insurance",
+    "not knowing if they have the right coverage",
+    "confused by policy options and fine print",
+    "fear of being underinsured after a disaster",
+    "hassle of switching insurance providers",
+    "unexpected rate increases every year"
+  ],
+  "benefits": [
+    "compare quotes from 20+ top carriers in 2 minutes",
+    "save an average of $500 per year",
+    "personalized coverage recommendations",
+    "no obligation free quotes",
+    "licensed agents available to help",
+    "easy online application"
+  ],
+  "cta": "Get My Free Quote",
+  "landing_page": "https://example.com/home-insurance",
+  "tone": ["trustworthy", "urgent", "helpful", "authoritative"],
+  "hook_categories": ["curiosity", "warning", "discovery", "urgency", "authority"],
+  "script_styles": ["testimonial", "authority", "direct_response", "comparison", "story"],
+  "video_lengths": ["short", "medium"],
+  "image_styles": ["lifestyle", "headline", "testimonial_still", "infographic", "quote_card"],
+  "broll_themes": ["family home exterior", "couple reviewing documents", "storm damage house", "happy homeowner", "insurance agent meeting"],
+  "brand_name": "HomeGuard",
+  "brand_colors": ["#1A3A5C", "#E8A020", "#FFFFFF"],
+  "disclaimer_text": "Rates vary by location and coverage. Not available in all states."
+}

@@ -1,0 +1,33 @@
+{
+  "offer_name": "Debt Relief",
+  "offer_description": "Resolve your debt for less than you owe. Our certified debt specialists negotiate with creditors to reduce your balance — no bankruptcy, no loans, no judgment.",
+  "vertical": "financial_services",
+  "target_audience": "Adults with $10,000+ in unsecured debt struggling with monthly payments",
+  "pain_points": [
+    "drowning in credit card debt with no end in sight",
+    "only making minimum payments that barely touch the balance",
+    "getting calls from debt collectors",
+    "can't sleep worrying about financial situation",
+    "afraid bankruptcy will ruin their life",
+    "tried balance transfers and consolidation loans that didn't work"
+  ],
+  "benefits": [
+    "reduce your total debt by up to 50%",
+    "one low monthly payment instead of many",
+    "stop creditor harassment calls",
+    "no upfront fees — only pay when we settle",
+    "certified debt specialists on your side",
+    "most clients are debt-free in 24-48 months"
+  ],
+  "cta": "See How Much I Can Save",
+  "landing_page": "https://example.com/debt-relief",
+  "tone": ["empathetic", "hopeful", "urgent", "trustworthy"],
+  "hook_categories": ["curiosity", "warning", "discovery", "urgency", "authority"],
+  "script_styles": ["testimonial", "story", "direct_response", "almost_missed", "comparison"],
+  "video_lengths": ["short", "medium", "long"],
+  "image_styles": ["lifestyle", "headline", "before_after", "testimonial_still", "quote_card"],
+  "broll_themes": ["stressed person with bills", "credit card stack", "person on phone with collector", "relief feeling free", "family financial freedom"],
+  "brand_name": "ClearPath",
+  "brand_colors": ["#8E44AD", "#F39C12", "#FFFFFF"],
+  "disclaimer_text": "Results vary. Debt relief services may negatively affect your credit. Consult a financial advisor."
+}
