@@ -307,6 +307,7 @@ export const homeWindows = {
     "Window companies often offer winter installation discounts when demand is lowest.",
     "Simulated divided lite grilles give historic homes modern performance with period-correct aesthetics.",
     "New egress windows meet safety codes — critical for basement bedrooms.",
+    "Whole-home window replacement can often be completed in a single day with minimal disruption.",
     // MEDIUM (additional)
     "I talked to three neighbors who had replaced their windows in the past two years. All three said the same thing: the biggest surprise wasn't the energy savings — it was the noise reduction. One neighbor lives on the same busy street I do. She said replacing her windows was 'like putting the entire outside world on mute.' Another neighbor said his wife could finally work from home without closing every door in the house. The third said his baby sleeps through the night now because street noise no longer wakes her. Three families, three different situations, same unexpected benefit.",
     "The installation process shocked me — in a good way. I expected a week of chaos. Plastic sheeting everywhere, sawdust, cold air blasting through open window holes. Instead, the crew did two windows at a time. Remove old, install new, seal, trim, clean up. Each window took about 40 minutes. They finished all 14 windows in a single day. By 5 PM, every window was installed, sealed, trimmed, and clean. No overnight gaps. No exposed openings. No mess. The disruption I'd been dreading for years was less than having carpet cleaned.",
@@ -407,6 +408,15 @@ export const homeWindows = {
     "A home that's genuinely sealed against pollen, dust, and outdoor allergens.",
     "You look forward to showing guests around instead of hoping they don't notice.",
     "The dog lies by the window again — it's warm enough now.",
+    "Your HVAC filter lasts longer because less outdoor air is forcing through the system.",
+    "Consistent indoor humidity — no more dry winter air from leaky window gaps.",
+    "New windows add architectural character that updates your home's entire appearance.",
+    "Tilt-in cleaning means no more hiring window washers for upper floors.",
+    "Storm protection without the hassle of installing and removing shutters every season.",
+    "Your home meets or exceeds current building codes — a critical factor for resale.",
+    "The kids' rooms are the same temperature as the rest of the house — finally.",
+    "Your monthly financing payment is less than what you were wasting on energy.",
+    "A home that feels new again — all from changing the one thing you see every day.",
     // MEDIUM (additional)
     "The sunroom we'd abandoned every winter is now our favorite room in the house year-round. Before the window replacement, it was a no-go zone from November through March — too cold, too drafty, too expensive to heat. Now, with triple-pane windows, it stays within 3 degrees of the rest of the house even on the coldest days. My wife reads there every morning. The kids do homework there after school. We reclaimed 200 square feet of living space that we'd been paying for but not using. At $200 per square foot of home value, that's $40,000 in usable space — recovered by replacing the windows.",
     "Something I didn't anticipate: how much better our home smells. Old windows with deteriorating seals were letting in moisture that fed mold and mildew in the frames and sills. We'd gotten used to that faint musty smell without realizing it. Two weeks after the new windows went in, a friend walked in and said, 'Your house smells different — cleaner.' We'd been nose-blind to a smell that was there for years. The new windows sealed out moisture, eliminated the mold food source, and our home smells like a home again — not like a damp basement.",
