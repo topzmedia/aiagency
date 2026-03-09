@@ -7,7 +7,7 @@ export type FeedbackLabel = 'very_relevant' | 'somewhat_relevant' | 'irrelevant'
 
 export type IngestionSourceType = 'local_folder' | 'csv_import' | 'url_stub' | 'demo_seed';
 
-export type IngestionJobStatus = 'queued' | 'processing' | 'completed' | 'failed';
+export type IngestionJobStatus = 'queued' | 'processing' | 'completed' | 'failed' | 'pending' | 'running';
 
 // Search types
 export interface SearchCreate {
@@ -77,13 +77,26 @@ export interface SearchResult {
   thumbnail_path?: string;
 }
 
+export interface ExplanationSegment {
+  start_time: number;
+  end_time: number;
+  label: string;
+  confidence: number;
+}
+
 export interface ResultExplanation {
   result_id: string;
   final_score: number;
   rank_position: number;
-  score_breakdown?: Record<string, number>;
-  matched_segments?: MatchedSegment[];
-  reason_codes?: string[];
+  score_breakdown: Record<string, number>;
+  matched_segments: ExplanationSegment[];
+  reason_codes: string[];
+  detected_objects: string[];
+  scene_labels: string[];
+  actions_detected: string[];
+  ocr_text?: string;
+  transcript_excerpt?: string;
+  duplicate_group?: string;
 }
 
 // Collection types
@@ -97,6 +110,7 @@ export interface Collection {
   user_id?: string;
   name: string;
   description?: string;
+  item_count: number;
   created_at: string;
   updated_at: string;
 }
@@ -110,8 +124,16 @@ export interface CollectionItem {
   id: string;
   collection_id: string;
   candidate_video_id: string;
+  result_id: string;
   notes?: string;
+  added_at: string;
   created_at: string;
+  result?: {
+    caption?: string;
+    platform?: string;
+    creator_handle?: string;
+    score: number;
+  };
 }
 
 // Ingestion types
@@ -128,6 +150,12 @@ export interface IngestionJob {
   total_records: number;
   imported_records: number;
   rejected_records: number;
+  total_items: number;
+  processed_items: number;
+  failed_items: number;
+  progress: number;
+  error_message?: string;
+  logs: string[];
   log_json?: unknown[];
   created_at: string;
   updated_at: string;
@@ -161,6 +189,8 @@ export interface SearchResultResponse {
 export interface HealthResponse {
   status: string;
   env: string;
+  version?: string;
+  uptime?: number;
 }
 
 // Rerank

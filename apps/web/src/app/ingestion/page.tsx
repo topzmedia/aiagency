@@ -81,7 +81,7 @@ export default function IngestionPage() {
     }
 
     try {
-      await createJob.mutateAsync({ source_type: sourceType, config });
+      await createJob.mutateAsync({ source_type: sourceType, source_config: config });
       setFolderPath('');
       setCsvData('');
       setUrls('');

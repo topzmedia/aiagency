@@ -128,6 +128,12 @@ export async function createCollection(
   });
 }
 
+export async function getCollectionItems(
+  collectionId: string
+): Promise<CollectionItem[]> {
+  return request<CollectionItem[]>(`/collections/${collectionId}/items`);
+}
+
 export async function addToCollection(
   collectionId: string,
   data: CollectionItemCreate
