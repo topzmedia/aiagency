@@ -8,6 +8,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
+        extra="ignore",
     )
 
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@db:5432/contentfinder"
