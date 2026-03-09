@@ -1,19 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchProjects, fetchBlocks, fetchOutputs, fetchVerticals } from '../lib/api';
-import { FolderOpen, Layers, FileOutput, BarChart3 } from 'lucide-react';
+import { fetchBlocks, fetchOutputs, fetchVerticals } from '../lib/api';
+import { BarChart3, Layers, FileOutput, Grid3X3 } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function Dashboard() {
-  const { data: projects, isLoading: loadingProjects } = useQuery({ queryKey: ['projects'], queryFn: () => fetchProjects() });
   const { data: blocks, isLoading: loadingBlocks } = useQuery({ queryKey: ['blocks'], queryFn: () => fetchBlocks() });
   const { data: outputs, isLoading: loadingOutputs } = useQuery({ queryKey: ['outputs'], queryFn: () => fetchOutputs() });
-  const { data: verticals } = useQuery({ queryKey: ['verticals'], queryFn: fetchVerticals });
+  const { data: verticals, isLoading: loadingVerticals } = useQuery({ queryKey: ['verticals'], queryFn: fetchVerticals });
 
-  if (loadingProjects || loadingBlocks || loadingOutputs) return <LoadingSpinner />;
+  if (loadingBlocks || loadingOutputs || loadingVerticals) return <LoadingSpinner />;
 
-  const totalProjects = projects?.length || 0;
   const totalBlocks = blocks?.length || 0;
   const totalOutputs = outputs?.length || 0;
+  const totalVerticals = verticals?.length || 0;
 
   // Outputs by vertical
   const outputsByVertical: Record<string, number> = {};
@@ -28,11 +27,10 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <SummaryCard icon={FolderOpen} label="Total Projects" value={totalProjects} color="bg-blue-500" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <SummaryCard icon={BarChart3} label="Verticals" value={totalVerticals} color="bg-blue-500" />
         <SummaryCard icon={Layers} label="Total Blocks" value={totalBlocks} color="bg-green-500" />
         <SummaryCard icon={FileOutput} label="Total Outputs" value={totalOutputs} color="bg-purple-500" />
-        <SummaryCard icon={BarChart3} label="Verticals" value={verticals?.length || 0} color="bg-orange-500" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
