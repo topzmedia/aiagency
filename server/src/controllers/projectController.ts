@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
 import { createProjectSchema, updateProjectSchema } from '../validators';
+import { contentBank } from '../data/contentBank';
+
+const BLOCK_TYPES = ['HOOK', 'PROBLEM', 'DISCOVERY', 'BENEFIT', 'CTA'] as const;
+const TONES = ['professional', 'casual', 'urgent', 'friendly', 'authoritative'];
 
 export async function getProjects(req: Request, res: Response) {
   try {
@@ -44,6 +48,33 @@ export async function createProject(req: Request, res: Response) {
       data,
       include: { vertical: true },
     });
+
+    // Auto-populate copy blocks from content bank
+    const verticalName = project.vertical?.name;
+    const bank = verticalName ? contentBank[verticalName] : null;
+    if (bank) {
+      const blockData: any[] = [];
+      for (const blockType of BLOCK_TYPES) {
+        const lines = bank[blockType];
+        if (!lines) continue;
+        for (let i = 0; i < lines.length; i++) {
+          blockData.push({
+            type: blockType,
+            label: `${blockType.charAt(0) + blockType.slice(1).toLowerCase()} #${i + 1}`,
+            content: lines[i],
+            tone: TONES[i % TONES.length],
+            audience: 'general',
+            projectId: project.id,
+            verticalId: project.verticalId,
+            isApproved: true,
+          });
+        }
+      }
+      if (blockData.length > 0) {
+        await prisma.copyBlock.createMany({ data: blockData });
+      }
+    }
+
     res.status(201).json(project);
   } catch (error: any) {
     if (error.name === 'ZodError') {
