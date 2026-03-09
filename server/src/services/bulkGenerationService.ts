@@ -106,54 +106,72 @@ export function generateBulkOutputs(params: BulkGenerationParams): BulkOutput[] 
   const benefitPool = slots.includes('benefit') ? getPool(params.benefits, params.lockedBenefitId) : [{ id: '', content: '', label: '' }];
   const ctaPool = slots.includes('cta') ? getPool(params.ctas, params.lockedCtaId) : [{ id: '', content: '', label: '' }];
 
-  // Generate all possible combinations
-  const allCombinations: BulkOutput[] = [];
   const seenHashes = new Set(params.existingHashes || []);
+  const results: BulkOutput[] = [];
+  const maxAttempts = params.count * 20; // avoid infinite loop
+  let attempts = 0;
 
-  for (const hook of hookPool) {
-    for (const problem of problemPool) {
-      for (const discovery of discoveryPool) {
-        for (const benefit of benefitPool) {
-          for (const cta of ctaPool) {
-            const hash = createCombinationHash(
-              params.templateId,
-              params.outputType,
-              hook.id,
-              problem.id,
-              discovery.id,
-              benefit.id,
-              cta.id
-            );
+  function pickRandom<T>(arr: T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
 
-            if (params.uniqueOnly && seenHashes.has(hash)) {
-              continue;
+  function buildOutput(
+    hook: BlockSelection,
+    problem: BlockSelection,
+    discovery: BlockSelection,
+    benefit: BlockSelection,
+    cta: BlockSelection,
+  ): BulkOutput | null {
+    const hash = createCombinationHash(
+      params.templateId, params.outputType,
+      hook.id, problem.id, discovery.id, benefit.id, cta.id,
+    );
+    if (params.uniqueOnly && seenHashes.has(hash)) return null;
+    seenHashes.add(hash);
+
+    const blockContents: Record<string, string> = {};
+    if (slots.includes('hook')) blockContents.hook = hook.content;
+    if (slots.includes('problem')) blockContents.problem = problem.content;
+    if (slots.includes('discovery')) blockContents.discovery = discovery.content;
+    if (slots.includes('benefit')) blockContents.benefit = benefit.content;
+    if (slots.includes('cta')) blockContents.cta = cta.content;
+
+    return {
+      hookBlockId: hook.id, problemBlockId: problem.id,
+      discoveryBlockId: discovery.id, benefitBlockId: benefit.id,
+      ctaBlockId: cta.id, fullText: renderTemplate(template, blockContents),
+      combinationHash: hash,
+    };
+  }
+
+  if (params.randomize) {
+    // Random sampling — pick random indices instead of iterating all combos
+    while (results.length < params.count && attempts < maxAttempts) {
+      attempts++;
+      const output = buildOutput(
+        pickRandom(hookPool), pickRandom(problemPool),
+        pickRandom(discoveryPool), pickRandom(benefitPool), pickRandom(ctaPool),
+      );
+      if (output) results.push(output);
+    }
+  } else {
+    // Sequential — iterate in order but stop early
+    for (let hi = 0; hi < hookPool.length && results.length < params.count; hi++) {
+      for (let pi = 0; pi < problemPool.length && results.length < params.count; pi++) {
+        for (let di = 0; di < discoveryPool.length && results.length < params.count; di++) {
+          for (let bi = 0; bi < benefitPool.length && results.length < params.count; bi++) {
+            for (let ci = 0; ci < ctaPool.length && results.length < params.count; ci++) {
+              const output = buildOutput(
+                hookPool[hi], problemPool[pi], discoveryPool[di],
+                benefitPool[bi], ctaPool[ci],
+              );
+              if (output) results.push(output);
             }
-
-            const blockContents: Record<string, string> = {};
-            if (slots.includes('hook')) blockContents.hook = hook.content;
-            if (slots.includes('problem')) blockContents.problem = problem.content;
-            if (slots.includes('discovery')) blockContents.discovery = discovery.content;
-            if (slots.includes('benefit')) blockContents.benefit = benefit.content;
-            if (slots.includes('cta')) blockContents.cta = cta.content;
-
-            const fullText = renderTemplate(template, blockContents);
-
-            allCombinations.push({
-              hookBlockId: hook.id,
-              problemBlockId: problem.id,
-              discoveryBlockId: discovery.id,
-              benefitBlockId: benefit.id,
-              ctaBlockId: cta.id,
-              fullText,
-              combinationHash: hash,
-            });
-            seenHashes.add(hash);
           }
         }
       }
     }
   }
 
-  let results = params.randomize ? shuffleArray(allCombinations) : allCombinations;
-  return results.slice(0, params.count);
+  return results;
 }

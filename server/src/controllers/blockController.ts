@@ -25,9 +25,10 @@ export async function getBlocks(req: Request, res: Response) {
       ];
     }
 
+    const includeRelations = req.query.slim !== 'true';
     const blocks = await prisma.copyBlock.findMany({
       where,
-      include: { project: true, vertical: true },
+      ...(includeRelations ? { include: { project: true, vertical: true } } : {}),
       orderBy: { createdAt: 'desc' },
     });
     res.json(blocks);

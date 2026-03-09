@@ -34,7 +34,7 @@ export default function BulkGenerator() {
   const { data: verticals } = useQuery({ queryKey: ['verticals'], queryFn: fetchVerticals });
   const { data: templates } = useQuery({ queryKey: ['templates'], queryFn: fetchTemplates });
 
-  const blockParams: Record<string, string> = {};
+  const blockParams: Record<string, string> = { slim: 'true' };
   if (projectId) blockParams.projectId = projectId;
   if (verticalId) blockParams.verticalId = verticalId;
 
