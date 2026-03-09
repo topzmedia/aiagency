@@ -138,13 +138,11 @@ export async function bulkGenerateHandler(req: Request, res: Response) {
   try {
     const data = bulkGenerateSchema.parse(req.body);
 
-    const where: any = {
-      projectId: data.projectId,
-      verticalId: data.verticalId,
-    };
-    if (data.approvedOnly) where.isApproved = true;
+    const blockWhere: any = { verticalId: data.verticalId };
+    if (data.projectId) blockWhere.projectId = data.projectId;
+    if (data.approvedOnly) blockWhere.isApproved = true;
 
-    const allBlocks = await prisma.copyBlock.findMany({ where });
+    const allBlocks = await prisma.copyBlock.findMany({ where: blockWhere });
 
     const hooks = allBlocks.filter((b) => b.type === 'HOOK').map((b) => ({ id: b.id, content: b.content, label: b.label }));
     const problems = allBlocks.filter((b) => b.type === 'PROBLEM').map((b) => ({ id: b.id, content: b.content, label: b.label }));
@@ -155,8 +153,10 @@ export async function bulkGenerateHandler(req: Request, res: Response) {
     // Get existing hashes if uniqueOnly
     let existingHashes: Set<string> | undefined;
     if (data.uniqueOnly) {
+      const hashWhere: any = { verticalId: data.verticalId };
+      if (data.projectId) hashWhere.projectId = data.projectId;
       const existingOutputs = await prisma.generatedOutput.findMany({
-        where: { projectId: data.projectId },
+        where: hashWhere,
         select: { combinationHash: true },
       });
       existingHashes = new Set(existingOutputs.map((o) => o.combinationHash));
@@ -189,7 +189,7 @@ export async function bulkGenerateHandler(req: Request, res: Response) {
       generated.map((output) =>
         prisma.generatedOutput.create({
           data: {
-            projectId: data.projectId,
+            projectId: data.projectId || null,
             verticalId: data.verticalId,
             outputType: data.outputType,
             hookBlockId: output.hookBlockId || null,

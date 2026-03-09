@@ -52,7 +52,7 @@ model CopyBlock {
 
 model GeneratedOutput {
   id               String   @id @default(uuid())
-  projectId        String
+  projectId        String?
   verticalId       String
   outputType       String   // AD_COPY, VIDEO_SCRIPT
   hookBlockId      String?
@@ -67,6 +67,6 @@ model GeneratedOutput {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  project  Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project  Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   vertical Vertical @relation(fields: [verticalId], references: [id], onDelete: Cascade)
 }

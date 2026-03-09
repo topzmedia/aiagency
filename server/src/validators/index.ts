@@ -71,7 +71,7 @@ export const composeOutputSchema = z.object({
 });
 
 export const bulkGenerateSchema = z.object({
-  projectId: z.string().min(1),
+  projectId: z.string().optional(),
   verticalId: z.string().min(1),
   outputType: z.enum(['AD_COPY', 'VIDEO_SCRIPT']),
   templateId: z.string().min(1),

@@ -1,20 +1,17 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  fetchProjects, fetchVerticals, fetchBlocks, fetchTemplates,
+  fetchVerticals, fetchBlocks, fetchTemplates,
   bulkGenerateOutputs, deleteOutput,
 } from '../lib/api';
 import { Shuffle, Trash2, Eye, AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react';
 import toast from 'react-hot-toast';
-import LoadingSpinner from '../components/LoadingSpinner';
-import EmptyState from '../components/EmptyState';
-import type { CopyBlock, CompositionTemplate, GeneratedOutput, Vertical } from '../types';
+import type { CopyBlock, CompositionTemplate } from '../types';
 
 const PAGE_SIZE = 10;
 
 export default function BulkGenerator() {
   const queryClient = useQueryClient();
-  const [projectId, setProjectId] = useState('');
   const [verticalId, setVerticalId] = useState('');
   const [outputType, setOutputType] = useState('AD_COPY');
   const [templateId, setTemplateId] = useState('default');
@@ -30,18 +27,16 @@ export default function BulkGenerator() {
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [page, setPage] = useState(0);
 
-  const { data: projects } = useQuery({ queryKey: ['projects'], queryFn: () => fetchProjects() });
   const { data: verticals } = useQuery({ queryKey: ['verticals'], queryFn: fetchVerticals });
   const { data: templates } = useQuery({ queryKey: ['templates'], queryFn: fetchTemplates });
 
   const blockParams: Record<string, string> = { slim: 'true' };
-  if (projectId) blockParams.projectId = projectId;
   if (verticalId) blockParams.verticalId = verticalId;
 
   const { data: blocks } = useQuery({
     queryKey: ['blocks', blockParams],
     queryFn: () => fetchBlocks(blockParams),
-    enabled: !!(projectId && verticalId),
+    enabled: !!verticalId,
   });
 
   const generateMut = useMutation({
@@ -77,20 +72,18 @@ export default function BulkGenerator() {
   const benefitBlocks = (blocks || []).filter((b: CopyBlock) => b.type === 'BENEFIT');
   const ctaBlocks = (blocks || []).filter((b: CopyBlock) => b.type === 'CTA');
 
-  function handleProjectChange(id: string) {
-    const project = projects?.find((p: any) => p.id === id);
-    setProjectId(id);
-    if (project) setVerticalId(project.verticalId);
+  function handleVerticalChange(id: string) {
+    setVerticalId(id);
     setLocks({ lockedHookId: '', lockedProblemId: '', lockedDiscoveryId: '', lockedBenefitId: '', lockedCtaId: '' });
   }
 
   function handleGenerate() {
-    if (!projectId || !verticalId) {
-      toast.error('Select a project');
+    if (!verticalId) {
+      toast.error('Select a vertical');
       return;
     }
     const data: any = {
-      projectId, verticalId, outputType, templateId, count,
+      verticalId, outputType, templateId, count,
       uniqueOnly, approvedOnly, randomize,
     };
     if (locks.lockedHookId) data.lockedHookId = locks.lockedHookId;
@@ -115,12 +108,12 @@ export default function BulkGenerator() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Project</label>
-            <select value={projectId} onChange={(e) => handleProjectChange(e.target.value)}
+            <label className="block text-sm font-medium text-gray-700 mb-1">Vertical</label>
+            <select value={verticalId} onChange={(e) => handleVerticalChange(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
               <option value="">Select...</option>
-              {(projects || []).map((p: any) => (
-                <option key={p.id} value={p.id}>{p.name}</option>
+              {(verticals || []).map((v: any) => (
+                <option key={v.id} value={v.id}>{v.name}</option>
               ))}
             </select>
           </div>
@@ -173,7 +166,7 @@ export default function BulkGenerator() {
         </div>
 
         {/* Lock Selectors */}
-        {projectId && (
+        {verticalId && (
           <div className="space-y-3 pt-3 border-t border-gray-100">
             <h4 className="text-sm font-medium text-gray-700">Lock Specific Blocks (Optional)</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -191,7 +184,7 @@ export default function BulkGenerator() {
           </div>
         )}
 
-        <button onClick={handleGenerate} disabled={generateMut.isPending || !projectId}
+        <button onClick={handleGenerate} disabled={generateMut.isPending || !verticalId}
           className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 disabled:opacity-50">
           <Shuffle size={16} /> {generateMut.isPending ? 'Generating...' : 'Generate Outputs'}
         </button>
