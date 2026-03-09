@@ -5,3 +5,4 @@ prisma/dev.db
 prisma/dev.db-journal
 prisma/migrations/
 *.log
+client/tsconfig.tsbuildinfo
