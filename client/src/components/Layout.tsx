@@ -1,7 +1,6 @@
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import {
   LayoutDashboard,
-  FolderOpen,
   Wand2,
   Library,
   Layers,
@@ -15,7 +14,6 @@ import { useState } from 'react';
 
 const navItems = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/projects', label: 'Projects', icon: FolderOpen },
   { path: '/generator', label: 'Block Generator', icon: Wand2 },
   { path: '/library', label: 'Block Library', icon: Library },
   { path: '/composer', label: 'Composer', icon: Layers },

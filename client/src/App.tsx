@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
-import Projects from './pages/Projects';
 import BlockGenerator from './pages/BlockGenerator';
 import BlockLibrary from './pages/BlockLibrary';
 import Composer from './pages/Composer';
@@ -28,7 +27,6 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
-            <Route path="projects" element={<Projects />} />
             <Route path="generator" element={<BlockGenerator />} />
             <Route path="library" element={<BlockLibrary />} />
             <Route path="composer" element={<Composer />} />
