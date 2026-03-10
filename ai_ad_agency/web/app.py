@@ -175,6 +175,16 @@ def _run_generation(job_id: str, config_name: str, pipeline: str, count: int) ->
 # Routes
 # ---------------------------------------------------------------------------
 
+@app.get("/cashout/v1", response_class=HTMLResponse)
+async def cashout_v1(request: Request):
+    return templates.TemplateResponse("cashout_v1.html", {"request": request})
+
+
+@app.get("/cashout/v2", response_class=HTMLResponse)
+async def cashout_v2(request: Request):
+    return templates.TemplateResponse("cashout_v2.html", {"request": request})
+
+
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     configs = sorted([f.name for f in CONFIGS_DIR.glob("*.json") if f.name != "app_config.json"])

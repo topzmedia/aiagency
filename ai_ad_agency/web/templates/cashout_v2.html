@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FHA Cash-Out Refinance — See If You Qualify for Up To $185,000</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif;color:#1e293b;background:#f1f5f9;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* ── Urgency Banner ──────────────────────────────────── */
+.urgency-bar{background:linear-gradient(90deg,#dc2626,#b91c1c);color:#fff;text-align:center;padding:10px 16px;font-size:.82rem;font-weight:600;letter-spacing:.2px}
+.urgency-bar span{background:rgba(255,255,255,.2);padding:2px 10px;border-radius:4px;margin-left:6px;font-weight:700}
+
+/* ── Nav ─────────────────────────────────────────────── */
+.nav{background:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e2e8f0}
+.nav-logo{font-size:1.15rem;font-weight:800;color:#0f172a}
+.nav-logo span{color:#0ea5e9}
+.nav-trust{font-size:.72rem;color:#64748b;display:flex;align-items:center;gap:4px}
+
+/* ── Quiz Container ──────────────────────────────────── */
+.quiz-wrapper{max-width:580px;margin:0 auto;padding:32px 16px 48px}
+.progress-bar{height:6px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-bottom:28px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#0ea5e9,#0284c7);border-radius:99px;transition:width .4s ease}
+.quiz-card{background:#fff;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.08);padding:40px 32px 36px;text-align:center;position:relative;overflow:hidden}
+.quiz-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#0ea5e9,#06b6d4)}
+.step-label{display:inline-block;background:#f0f9ff;color:#0284c7;font-size:.75rem;font-weight:700;padding:5px 14px;border-radius:50px;margin-bottom:16px;letter-spacing:.5px;text-transform:uppercase}
+.quiz-card h2{font-size:1.4rem;font-weight:800;margin-bottom:6px;line-height:1.3}
+.quiz-card .desc{font-size:.88rem;color:#64748b;margin-bottom:28px}
+
+/* Option buttons */
+.option-grid{display:grid;gap:12px}
+.option-grid.cols-2{grid-template-columns:1fr 1fr}
+.option-btn{display:flex;align-items:center;gap:12px;padding:16px 18px;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;cursor:pointer;transition:all .2s;font-size:.92rem;font-weight:600;color:#334155;text-align:left}
+.option-btn:hover{border-color:#0ea5e9;background:#f0f9ff}
+.option-btn.selected{border-color:#0ea5e9;background:#f0f9ff;box-shadow:0 0 0 3px rgba(14,165,233,.15)}
+.option-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.bg-blue{background:#eff6ff}
+.bg-green{background:#ecfdf5}
+.bg-amber{background:#fffbeb}
+.bg-purple{background:#f5f3ff}
+.bg-rose{background:#fff1f2}
+.bg-cyan{background:#ecfeff}
+
+/* Submit / Next button */
+.next-btn{display:block;width:100%;padding:16px;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;font-size:1.08rem;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:transform .15s,box-shadow .15s;margin-top:24px;letter-spacing:.2px}
+.next-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(14,165,233,.3)}
+.next-btn:active{transform:translateY(0)}
+.next-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Result screen */
+.result-amount{font-size:2.8rem;font-weight:900;color:#059669;margin:8px 0 4px}
+.result-sub{font-size:.92rem;color:#64748b;margin-bottom:28px}
+.result-bar{height:12px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin:0 20px 24px}
+.result-bar-fill{height:100%;background:linear-gradient(90deg,#059669,#10b981);border-radius:99px;animation:fillBar 1.5s ease forwards}
+@keyframes fillBar{from{width:0}to{width:85%}}
+.result-check{display:flex;align-items:center;gap:10px;text-align:left;padding:10px 0;font-size:.88rem;color:#334155}
+.result-check svg{width:20px;height:20px;fill:#059669;flex-shrink:0}
+.result-divider{border:none;border-top:1px solid #e2e8f0;margin:20px 0}
+.final-cta{display:block;width:100%;padding:18px;background:linear-gradient(135deg,#059669,#047857);color:#fff;font-size:1.15rem;font-weight:800;border:none;border-radius:14px;cursor:pointer;transition:transform .15s,box-shadow .15s;letter-spacing:.3px}
+.final-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(5,150,105,.35)}
+
+/* Trust footer */
+.trust-footer{text-align:center;padding:20px 16px;max-width:580px;margin:0 auto}
+.trust-icons{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:12px}
+.trust-icon{display:flex;align-items:center;gap:6px;font-size:.75rem;color:#64748b;font-weight:500}
+.trust-icon svg{width:16px;height:16px}
+.trust-footer .disclaimer{font-size:.68rem;color:#94a3b8;max-width:480px;margin:0 auto;line-height:1.6}
+
+/* Animations */
+.quiz-step{display:none}
+.quiz-step.active{display:block;animation:fadeUp .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Counter animation */
+.counter{display:inline-block}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media(max-width:500px){
+  .quiz-card{padding:28px 20px 28px}
+  .quiz-card h2{font-size:1.2rem}
+  .option-grid.cols-2{grid-template-columns:1fr}
+  .result-amount{font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Urgency Bar -->
+<div class="urgency-bar">
+  ⚡ 2026 Cash-Out Program: Homeowners are accessing up to <span>$185,000</span>
+</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-logo">FHA<span>CashOut</span></div>
+  <div class="nav-trust">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="#0ea5e9"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg>
+    Secure &amp; Encrypted
+  </div>
+</nav>
+
+<!-- Quiz -->
+<div class="quiz-wrapper">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:16%"></div></div>
+
+  <div class="quiz-card">
+
+    <!-- Step 1: Property Type -->
+    <div class="quiz-step active" data-step="1">
+      <span class="step-label">Step 1 of 5</span>
+      <h2>What type of property do you own?</h2>
+      <p class="desc">This helps us find the best cash-out programs for you.</p>
+      <div class="option-grid cols-2">
+        <div class="option-btn" data-value="single_family" onclick="selectOption(this)">
+          <div class="option-icon bg-blue">🏡</div> Single Family
+        </div>
+        <div class="option-btn" data-value="multi_family" onclick="selectOption(this)">
+          <div class="option-icon bg-green">🏘️</div> Multi-Family
+        </div>
+        <div class="option-btn" data-value="condo" onclick="selectOption(this)">
+          <div class="option-icon bg-amber">🏢</div> Condo / Townhome
+        </div>
+        <div class="option-btn" data-value="manufactured" onclick="selectOption(this)">
+          <div class="option-icon bg-purple">🏠</div> Manufactured
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Home Value -->
+    <div class="quiz-step" data-step="2">
+      <span class="step-label">Step 2 of 5</span>
+      <h2>What's the estimated value of your home?</h2>
+      <p class="desc">An approximation is fine — we'll refine later.</p>
+      <div class="option-grid">
+        <div class="option-btn" data-value="100k-200k" onclick="selectOption(this)">
+          <div class="option-icon bg-green">💵</div> $100,000 – $200,000
+        </div>
+        <div class="option-btn" data-value="200k-300k" onclick="selectOption(this)">
+          <div class="option-icon bg-blue">💵</div> $200,000 – $300,000
+        </div>
+        <div class="option-btn" data-value="300k-500k" onclick="selectOption(this)">
+          <div class="option-icon bg-amber">💰</div> $300,000 – $500,000
+        </div>
+        <div class="option-btn" data-value="500k+" onclick="selectOption(this)">
+          <div class="option-icon bg-purple">🏦</div> $500,000+
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Current Mortgage -->
+    <div class="quiz-step" data-step="3">
+      <span class="step-label">Step 3 of 5</span>
+      <h2>Do you currently have a mortgage?</h2>
+      <p class="desc">This determines which programs you qualify for.</p>
+      <div class="option-grid cols-2">
+        <div class="option-btn" data-value="yes" onclick="selectOption(this)">
+          <div class="option-icon bg-blue">✅</div> Yes
+        </div>
+        <div class="option-btn" data-value="no" onclick="selectOption(this)">
+          <div class="option-icon bg-green">🏠</div> No, owned free &amp; clear
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Credit Score -->
+    <div class="quiz-step" data-step="4">
+      <span class="step-label">Step 4 of 5</span>
+      <h2>What's your estimated credit score?</h2>
+      <p class="desc">This won't affect your score — just helps us match offers.</p>
+      <div class="option-grid">
+        <div class="option-btn" data-value="excellent" onclick="selectOption(this)">
+          <div class="option-icon bg-green">⭐</div> Excellent (720+)
+        </div>
+        <div class="option-btn" data-value="good" onclick="selectOption(this)">
+          <div class="option-icon bg-blue">👍</div> Good (680 – 719)
+        </div>
+        <div class="option-btn" data-value="fair" onclick="selectOption(this)">
+          <div class="option-icon bg-amber">📊</div> Fair (620 – 679)
+        </div>
+        <div class="option-btn" data-value="poor" onclick="selectOption(this)">
+          <div class="option-icon bg-rose">📉</div> Below 620
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5: Cash-Out Purpose -->
+    <div class="quiz-step" data-step="5">
+      <span class="step-label">Step 5 of 5</span>
+      <h2>What will you use the cash for?</h2>
+      <p class="desc">Select the primary reason — you can use funds for anything.</p>
+      <div class="option-grid">
+        <div class="option-btn" data-value="debt" onclick="selectOption(this)">
+          <div class="option-icon bg-blue">💳</div> Pay Off Debt
+        </div>
+        <div class="option-btn" data-value="renovation" onclick="selectOption(this)">
+          <div class="option-icon bg-green">🔨</div> Home Improvements
+        </div>
+        <div class="option-btn" data-value="expenses" onclick="selectOption(this)">
+          <div class="option-icon bg-amber">📋</div> Major Expenses
+        </div>
+        <div class="option-btn" data-value="other" onclick="selectOption(this)">
+          <div class="option-icon bg-purple">💡</div> Other / Not Sure
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6: Calculating (animation) -->
+    <div class="quiz-step" data-step="6">
+      <span class="step-label">Analyzing</span>
+      <h2>Finding Your Best Cash-Out Offers...</h2>
+      <p class="desc">Matching you with top-rated lenders in our network.</p>
+      <div style="margin:32px 0">
+        <svg width="56" height="56" viewBox="0 0 50 50" style="animation:spin 1s linear infinite">
+          <circle cx="25" cy="25" r="20" fill="none" stroke="#e2e8f0" stroke-width="4"/>
+          <circle cx="25" cy="25" r="20" fill="none" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="80 126" stroke-linecap="round"/>
+        </svg>
+        <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;text-align:left;max-width:300px;margin:0 auto">
+        <div class="loading-check" id="lc1" style="opacity:.3;transition:opacity .4s">
+          <span style="color:#059669;margin-right:8px">✓</span> Verifying property eligibility...
+        </div>
+        <div class="loading-check" id="lc2" style="opacity:.3;transition:opacity .4s">
+          <span style="color:#059669;margin-right:8px">✓</span> Checking available programs...
+        </div>
+        <div class="loading-check" id="lc3" style="opacity:.3;transition:opacity .4s">
+          <span style="color:#059669;margin-right:8px">✓</span> Calculating max cash-out amount...
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 7: Results -->
+    <div class="quiz-step" data-step="7">
+      <span class="step-label" style="background:#ecfdf5;color:#059669">✓ Great News!</span>
+      <h2>You May Qualify For Up To</h2>
+      <div class="result-amount" id="resultAmount">$0</div>
+      <div class="result-sub">Based on your answers, multiple lenders are ready to compete for your business.</div>
+      <div class="result-bar"><div class="result-bar-fill"></div></div>
+
+      <div style="text-align:left;margin-bottom:20px">
+        <div class="result-check">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Cash-out programs available for your property
+        </div>
+        <div class="result-check">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Multiple lenders competing for your rate
+        </div>
+        <div class="result-check">
+          <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          No obligation — see your options for free
+        </div>
+      </div>
+
+      <hr class="result-divider">
+
+      <a href="https://rt.savvyhomeowner.org/click" class="final-cta" id="finalCta">
+        Claim My Cash-Out Offer →
+      </a>
+
+      <p style="font-size:.72rem;color:#94a3b8;margin-top:14px">
+        🔒 Your information is secure and will not be shared without your consent.
+      </p>
+    </div>
+
+  </div><!-- /quiz-card -->
+</div><!-- /quiz-wrapper -->
+
+<!-- Trust Footer -->
+<div class="trust-footer">
+  <div class="trust-icons">
+    <div class="trust-icon">
+      <svg viewBox="0 0 24 24" fill="#64748b"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+      SSL Encrypted
+    </div>
+    <div class="trust-icon">
+      <svg viewBox="0 0 24 24" fill="#64748b"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      No Credit Impact
+    </div>
+    <div class="trust-icon">
+      <svg viewBox="0 0 24 24" fill="#64748b"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      Trusted Network
+    </div>
+  </div>
+  <p class="disclaimer">This is not an offer to lend nor a guarantee of rates or terms. All loan approvals are subject to underwriting guidelines and credit approval. Programs, rates, terms, and conditions are subject to change without notice. &copy; 2026 FHACashOut. Equal Housing Opportunity. NMLS Consumer Access.</p>
+</div>
+
+<script>
+(function(){
+  var currentStep = 1;
+  var totalSteps = 7;
+  var answers = {};
+
+  window.selectOption = function(el) {
+    // Deselect siblings
+    var siblings = el.parentElement.querySelectorAll('.option-btn');
+    for (var i = 0; i < siblings.length; i++) siblings[i].classList.remove('selected');
+    el.classList.add('selected');
+
+    // Store answer
+    answers['step' + currentStep] = el.getAttribute('data-value');
+
+    // Auto-advance after brief delay
+    setTimeout(function(){ goNext(); }, 350);
+  };
+
+  function goNext() {
+    if (currentStep >= totalSteps) return;
+
+    // Hide current
+    var cur = document.querySelector('.quiz-step[data-step="' + currentStep + '"]');
+    if (cur) cur.classList.remove('active');
+
+    currentStep++;
+
+    // Update progress
+    var pct = Math.round((currentStep / totalSteps) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    // Show next
+    var next = document.querySelector('.quiz-step[data-step="' + currentStep + '"]');
+    if (next) next.classList.add('active');
+
+    // If loading step
+    if (currentStep === 6) {
+      runLoadingSequence();
+    }
+  }
+
+  function runLoadingSequence() {
+    setTimeout(function(){ document.getElementById('lc1').style.opacity = '1'; }, 600);
+    setTimeout(function(){ document.getElementById('lc2').style.opacity = '1'; }, 1400);
+    setTimeout(function(){ document.getElementById('lc3').style.opacity = '1'; }, 2200);
+    setTimeout(function(){ goNext(); animateAmount(); }, 3000);
+  }
+
+  function animateAmount() {
+    var target = 185000;
+    var duration = 1500;
+    var start = Date.now();
+    var el = document.getElementById('resultAmount');
+
+    function tick() {
+      var elapsed = Date.now() - start;
+      var progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.round(target * eased);
+      el.textContent = '$' + current.toLocaleString();
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    tick();
+  }
+})();
+</script>
+
+</body>
+</html>
