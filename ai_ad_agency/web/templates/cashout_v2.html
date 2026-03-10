@@ -108,7 +108,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
 
     <!-- Step 1: Property Type -->
     <div class="quiz-step active" data-step="1">
-      <span class="step-label">Step 1 of 5</span>
+      <span class="step-label">Step 1 of 4</span>
       <h2>What type of property do you own?</h2>
       <p class="desc">This helps us find the best cash-out programs for you.</p>
       <div class="option-grid cols-2">
@@ -127,30 +127,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
       </div>
     </div>
 
-    <!-- Step 2: Home Value -->
+    <!-- Step 2: Current Mortgage -->
     <div class="quiz-step" data-step="2">
-      <span class="step-label">Step 2 of 5</span>
-      <h2>What's the estimated value of your home?</h2>
-      <p class="desc">An approximation is fine — we'll refine later.</p>
-      <div class="option-grid">
-        <div class="option-btn" data-value="100k-200k" onclick="selectOption(this)">
-          <div class="option-icon bg-green">💵</div> $100,000 – $200,000
-        </div>
-        <div class="option-btn" data-value="200k-300k" onclick="selectOption(this)">
-          <div class="option-icon bg-blue">💵</div> $200,000 – $300,000
-        </div>
-        <div class="option-btn" data-value="300k-500k" onclick="selectOption(this)">
-          <div class="option-icon bg-amber">💰</div> $300,000 – $500,000
-        </div>
-        <div class="option-btn" data-value="500k+" onclick="selectOption(this)">
-          <div class="option-icon bg-purple">🏦</div> $500,000+
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 3: Current Mortgage -->
-    <div class="quiz-step" data-step="3">
-      <span class="step-label">Step 3 of 5</span>
+      <span class="step-label">Step 2 of 4</span>
       <h2>Do you currently have a mortgage?</h2>
       <p class="desc">This determines which programs you qualify for.</p>
       <div class="option-grid cols-2">
@@ -163,9 +142,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
       </div>
     </div>
 
-    <!-- Step 4: Credit Score -->
-    <div class="quiz-step" data-step="4">
-      <span class="step-label">Step 4 of 5</span>
+    <!-- Step 3: Credit Score -->
+    <div class="quiz-step" data-step="3">
+      <span class="step-label">Step 3 of 4</span>
       <h2>What's your estimated credit score?</h2>
       <p class="desc">This won't affect your score — just helps us match offers.</p>
       <div class="option-grid">
@@ -184,9 +163,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
       </div>
     </div>
 
-    <!-- Step 5: Cash-Out Purpose -->
-    <div class="quiz-step" data-step="5">
-      <span class="step-label">Step 5 of 5</span>
+    <!-- Step 4: Cash-Out Purpose -->
+    <div class="quiz-step" data-step="4">
+      <span class="step-label">Step 4 of 4</span>
       <h2>What will you use the cash for?</h2>
       <p class="desc">Select the primary reason — you can use funds for anything.</p>
       <div class="option-grid">
@@ -205,8 +184,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
       </div>
     </div>
 
-    <!-- Step 6: Calculating (animation) -->
-    <div class="quiz-step" data-step="6">
+    <!-- Step 5: Calculating (animation) -->
+    <div class="quiz-step" data-step="5">
       <span class="step-label">Analyzing</span>
       <h2>Finding Your Best Cash-Out Offers...</h2>
       <p class="desc">Matching you with top-rated lenders in our network.</p>
@@ -230,8 +209,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
       </div>
     </div>
 
-    <!-- Step 7: Results -->
-    <div class="quiz-step" data-step="7">
+    <!-- Step 6: Results -->
+    <div class="quiz-step" data-step="6">
       <span class="step-label" style="background:#ecfdf5;color:#059669">✓ Great News!</span>
       <h2>You May Qualify For Up To</h2>
       <div class="result-amount" id="resultAmount">$0</div>
@@ -289,7 +268,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
 <script>
 (function(){
   var currentStep = 1;
-  var totalSteps = 7;
+  var totalSteps = 6;
   var answers = {};
 
   window.selectOption = function(el) {
@@ -323,7 +302,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubunt
     if (next) next.classList.add('active');
 
     // If loading step
-    if (currentStep === 6) {
+    if (currentStep === 5) {
       runLoadingSequence();
     }
   }
